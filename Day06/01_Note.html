@@ -2,84 +2,46 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>box model css</title>
-
-        <!-- 내부 스타일시트 -->
+        <title>01_Free Study</title>
         <style>
             p.aaa{
-                /* 경계선 스타일 (두께는 기본값으로 부여. ~=3px) */
                 border-style: solid;
-
-                /* top, right, bottom, left 로 나누어 스타일 지정 가능 */
-                border-top-style: dotted;
-
-                /* 경계선 두께 */
-                border-width: 3px;
-                border-bottom-width: 8px;
-
-                /* 경계선 색상 */
-                border-color: red;
-                border-right-color: blue;
-
-                /* 경계선 모서리 라운드.. 둥글게.. */
-                border-radius: 20px;
-                border-bottom-left-radius: 0px;
+                border-top-style: double;
+                border-width: 5px;
+                border-bottom-width: 3px;
+                border-color: aqua;
+                border-right-color: black;
+                border-radius: 25px;
+                border-bottom-left-radius: 30%;
                 border-top-right-radius: 0px;
-
-                /* 경계선 축약...[size style color] */
-                border: 30px solid #00000000;  /* RGBA - 투명하게.. */
-                border: 30px solid transparent;  /* 투명하게 */
-
-                /* 경계선을 이미지 파일로 그려내기 */
+                border: 20px solid #000000ff;
+                border: 10px solid transparent;
                 border-image-source: url('./image/border.png');
-                border-image-slice: 30 30;   /* 높이 너비 (9조각으로 자를때1조각의 크기) */
-                border-image-repeat: round;
+                border-image-slice: 20 20;
+                border-image-repeat:inherit;
 
-                /* 요소 크기 */
                 width: 70%;
                 height: 300px;
-
-                /* 요소 밖 여백.. 지정 (마진) */
-                margin-left: calc(70%-30px);
-
-                /* 가운데 배치 하려면.. 자동 마진을 활용 */
+                
+                margin-left: 50px;
                 margin-left: auto;
                 margin-right: auto;
             }
-
-            /* 인라인 요소는 width, height 속성이 적용되지 않음 */
-            a{background-color: red; width: 200px;}
-            em{background-color: aqua; width: 100%;}
-
-            /* 인라인 요소 중에서 인라인-블럭 요소는 크기 조정 가능함 */
-            img{width: 400px; border: 1px solid black;}
-            input{width: 100%; background-color: aquamarine;}
-
-            /* block 요소만 마진 auto 가능함 */
-            strong{margin-left: 50px;}  /* 적용 됨 */
-            strong{margin-left: auto;}  /* 적용 안됨 */
-            /* inline-block 요소 조차도 마진 auto는 안됨 */
+            a{background-color: red; width: 400px;}
+            em{background-color: aqua; width: 100px;}
+            img{width: 200px; border: 4px double black;}
+            input{width: 50%; background-color: beige;}
+            strong{margin-left: 200px;}
+            strong{margin-right: auto;}
             img{margin: auto;}
-            /* 요소의 성질을 바꾸면 블럭처럼 사용가능함 */
-            strong{display: block; background-color: bisque; width: 200px; margin-left: auto; margin-right: auto;}
-
+            strong{display: block; background-color: azure; width: 200px; margin-left: auto;}
         </style>
-
-        <!-- 또다른 내부 스타일 시트 -->
         <style>
-            /* 마진은 겹칠 수 있음 */
-            #p1{background-color: red; height: 50px; margin: 0px; margin-bottom: 10px;}
-            #p2{background-color: green; height: 50px; margin: 0px; margin-top: 10px;} 
-
-            /* 음수 마진도 존재함.. 요소가 겹쳐질 수 있음 */
-            #p1{background-color: red; height: 50px; margin: 0px; }
-            #p2{background-color: green; height: 50px; margin: 0px; width: 50%; margin-top: -20px;} 
-
+            #p1{background-color: violet; height: 50px; margin: 0px; margin-bottom: 10px; text-align: center;}
+            #p2{background-color: rgb(79, 190, 153); width: 200px; height: 50px; margin: 0px; margin-top: -30px; text-align: right;}
         </style>
-
     </head>
     <body>
-
         <h2>박스모델(액자 크기 및 배경과 경계선)</h2>
     
         <!-- 1. 경계선 border / 요소크기 / 수평 중앙 정렬-->
@@ -120,21 +82,19 @@
         <!-- 내부 스크립트 -->
         <style>
             p.ccc{
-                background-color: green;
-                background-image: url('./image/image.png');
-                background-size: 150px 80px;
-
-                background-repeat: repeat;  /* default */
-                background-repeat: repeat-x;
+                background-color:darkseagreen;
+                background-image: url('./image/rabbit.png');
+                background-size: 100px 150px;
+                background-repeat: repeat;
                 background-repeat: no-repeat;
+                /* background-repeat: repeat-y; */
                 background-position: center;
-                background-position: right center;
+                background-position: right top;
                 background-position: center top;
 
-                /* 축약형 [ color  image  repeat  position ] */
-                background: greenyellow url('./image/image.png') no-repeat center;
-                margin: 20px 10px;
-                padding: 30px 20px 20px 30px; /* top right bottom left */
+                background: antiquewhite url('./image/lion.png') no-repeat center right;
+                margin: 10px 30px;
+                padding: 10px 10px 10px 10px;
             }
         </style>
 
@@ -150,29 +110,21 @@
         </p>
         <style>
             p.ddd{
-                width: 60%;
-                height: 300px;
-                border: 2px solid blue;
-                overflow: scroll;
+               width: 70%;
+               height: 300px;
+               border: 4px dotted green;
+               overflow: auto;
+               margin-right: auto;
+               margin-left: auto;
 
-                margin-left: auto;
-                margin-right: auto;
-
-                background-image: url('./image/image.png');
-                background-repeat: no-repeat;
-                background-size: 150px 80px;
-                background-position: center;
-
-                background-attachment: scroll;  /* default : 요소에 붙어있는 배경 */
-                background-attachment: local;  /* 콘텐츠에 붙어있는 배경 */
-                background-attachment: fixed;  /* 브라우저 스크롤 기준 - 요소의 배경이기에 p요소 밖에서는 보이지 않음. */
-
+               background-image: url('./image/computer.png');
+               background-repeat: no-repeat;
+               background-size: 150px 500px;
+               background-position: center;
+               background-attachment: scroll;
+               background-attachment: local;
+               background-attachment: fixed;
             }
-
-
         </style>
-
-
-
     </body>
 </html>
