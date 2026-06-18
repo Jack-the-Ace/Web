@@ -72,3 +72,6 @@ alert("댓글이 제출되었습니다. 비매너 댓글 작성 시, 운영진�
 // 제출 완료 후 입력창 청소
 replyText.value = "";
 });
+document.getElementById('like').onclick = function() {
+    location.href = "https://jack.dothome.co.kr/UAS/like.html";
+};

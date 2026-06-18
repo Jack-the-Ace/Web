@@ -59,6 +59,7 @@ main a:hover {
     padding: 5px;             /* 살짝 액자 같은 느낌을 줌 */
     transition: all 0.3s ease;
 }
+aside a {text-decoration: none;}
 footer {
     background-color: #ebf3f9; color: #8faabf;
     font-size: 0.8rem; font-weight: 400;
