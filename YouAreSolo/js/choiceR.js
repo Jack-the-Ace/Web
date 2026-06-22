@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 제출 버튼을 눌렀을 때 작동할 이벤트
         submitBtn.addEventListener('click', () => {
             if (selectedRating > 0) {
-                alert(`영숙님에게 별 ${selectedRating}점을 제출했습니다! 💘`);
+                alert(`정숙님에게 별 ${selectedRating}점을 제출했습니다! 💘`);
             }
         });
     }
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         likeBtn.onclick = function() {
             const nicknameElement = document.querySelector('.profile_info .nickname');
             const nickname = nicknameElement ? nicknameElement.innerText.trim() : "○○";            
-            // 주소 뒤에 name=영숙 값을 붙여서 like.html 페이지로 토스!
+            // 주소 뒤에 name=정숙 값을 붙여서 like.html 페이지로 토스!
             location.href = "https://jack.dothome.co.kr/UAS/like.html?name=" + encodeURIComponent(nickname);
         };
     }

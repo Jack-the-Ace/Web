@@ -9,13 +9,8 @@
 .profile_info span + span {border-left: 1px solid #bedaf3;}
 .profile_info .nickname {color: #3a8bcd;}
 p.profile_text{
-    color: rgb(10, 10, 66);
-    width: 98%;
-    height: 350px;
+    color: rgb(10, 10, 66); width: 98%; height: 350px;
     border: 1px solid skyblue; border-radius: 8px; padding: 10px;
-    overflow-y: auto;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    box-sizing: border-box;
-    margin-left: auto;
-    margin-right: auto;}
+    overflow-y: auto; font-size: 0.95rem; line-height: 1.6; box-sizing: border-box;
+    margin-left: auto; margin-right: auto;
+}

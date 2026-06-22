@@ -3,37 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Like</title>
+    <title>Like - 너는솔로</title>
     <link rel="stylesheet" href="./css/like.css">
+    <style>
+        body {
+            background-color: #f4f9fc;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #2c3e50; margin: 0; padding: 20px 0;
+            display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
+            overflow-x: hidden; box-sizing: border-box;
+        }
+        #wrap {
+            max-width: 450px; width: 100%; padding: 30px 20px; box-sizing: border-box;
+            background: #d9edf7; border: 1px solid #e1eef6; border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(163, 197, 222, 0.2);
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        h3 { text-align: center; color: #3a8bcd; margin: 10px 0 5px 0; font-size: 1.4rem; font-weight: 700; width: 100%; }
+        h4 { color: #5b7e96; margin: 15px 0 8px 0; font-weight: 600; font-size: 1.1rem; width: 100%; text-align: left; }
+        h5 { color: #5b7e96; margin: 0 0 8px 0; font-weight: 600; font-size: 1rem; }
+        p { margin: 5px 0; text-align: center; color: #7f8c8d; font-size: 0.95rem; }
+        hr {
+            width: 100%; border: 0; height: 1px; margin: 10px 0;
+            background: linear-gradient(to right, transparent, #bedaf3, transparent);
+        }
+        form { width: 100%; display: flex; flex-direction: column; align-items: center; }
+
+        dl { width: 100%; background: #f4f9fc; border-radius: 16px; padding: 15px; box-sizing: border-box; margin: 10px 0; }
+        dd { margin: 0; padding: 6px 0; font-size: 1rem; display: flex; align-items: center; }
+        dd label { cursor: pointer; display: flex; align-items: center; gap: 8px; width: 100%; }
+        dd input[type="radio"] { width: 18px; height: 18px; accent-color: #72b3e6; cursor: pointer; margin: 0; }
+        textarea {
+            color: #2c3e50; width: 100%; height: 200px;
+            border: 1px solid #bedafc; border-radius: 12px; padding: 12px;
+            overflow-y: auto; font-size: 0.95rem; line-height: 1.6;
+            box-sizing: border-box; resize: none; outline: none; background: #f4f9fc;
+        }
+        textarea:focus { border-color: #72b3e6; box-shadow: 0 0 0 3px rgba(114, 175, 222, 0.15); }
+
+        .file_group { width: 100%; margin: 15px 0; font-size: 0.9rem; font-weight: 600; color: #5b7e96; }
+        .file_group input[type="file"] { margin-top: 6px; width: 100%; color: #2c3e50; }
+
+        .btn_group { width: 100%; display: flex; gap: 10px; margin-top: 10px; }
+        .btn_group input[type="submit"], 
+        .btn_group input[type="reset"],
+        .log_btn {
+            flex: 1; height: 50px; border: none; border-radius: 14px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;  box-shadow: 0 4px 12px rgba(114, 175, 222, 0.15);
+        }
+        .btn_group input[type="submit"] { background: #ff9ebb; color: white; }
+        .btn_group input[type="reset"] { background: linear-gradient(135deg, #9dd1f7 0%, #72b3e6 100%); color: white; }
+        .log_btn { width: 100%; background: #f4f9fc; color: #3a8bcd; border: 1px solid #bedafc; margin-top: 5px; }
+    </style>
 </head>
 <body>
-    <h3>○○님께 좋아요를 보냅니다!</h3>
-    <hr>
-    <fieldset>
-        <legend></legend>
+    <div id="wrap">
+        <h3>○○님께 좋아요를 보냅니다!</h3>
         <p>마음에 드는 분께 진심을 전해보세요!</p>
-        <hr>
+        <hr>        
         <form action="like.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="target_name_input" name="target_name" value="">
             <dl>
                 <dt><h5>결혼가치관</h5></dt>
-                <dd><label><input type="radio" name="marry" value="비혼" checked>비혼</label></dd>
-                <dd><label><input type="radio" name="marry" value="결혼 희망">결혼 희망</label></dd>
-                <dd><label><input type="radio" name="marry" value="상관 없음">상관 없음</label></dd>
-            </dl>
+                <dd><label><input type="radio" name="marry" value="비혼" checked> 비혼</label></dd>
+                <dd><label><input type="radio" name="marry" value="결혼 희망"> 결혼 희망</label></dd>
+                <dd><label><input type="radio" name="marry" value="상관 없음"> 상관 없음</label></dd>
+            </dl>       
             <h4>메세지 보내기!</h4>
-            <textarea name="msg" cols="100" rows="50" placeholder="1,000자 이내로 작성해주세요! :)"></textarea><br>
-            <label>첨부파일: <input type="file" name="img"></label>
-            <hr>
-            <p>
+            <textarea name="msg" placeholder="1,000자 이내로 작성해주세요! :)"></textarea>        
+            <div class="file_group">
+                <label>첨부파일 <input type="file" name="img" accept="image/*"></label>
+            </div>            
+            <hr>            
+            <div class="btn_group">
                 <input type="submit" value="좋아요♡보내기">
                 <input type="reset" value="다시 쓰기">
-            </p>
+            </div>
         </form>
         <hr>
         <form action="like.php" method="get">
-            <input type="submit" value="로그 페이지로 바로가기">
+            <input type="submit" class="log_btn" value="로그 페이지로 바로가기">
         </form>
-    </fieldset>   
-    
+    </div> 
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {           
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetName = urlParams.get('name');            
+            if (targetName) {
+                const titleElement = document.querySelector('#wrap h3');
+                titleElement.innerText = `${targetName}님께 좋아요를 보냅니다!`;
+                document.getElementById('target_name_input').value = targetName;
+            }
+        });
+    </script>
 </body>
 </html>
