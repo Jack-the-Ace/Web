@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ROBBY | 데이트 맛집 탐색기</title>
+  <style>
+    :root { --sky:#75c9ee; --navy:#17324d; --ink:#29435a; --line:#dbe7ee; --bg:#f5fbfe; --accent:#ff6685; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--bg); font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; }
+    .header { padding:18px 24px; color:#fff; background:var(--sky); box-shadow:0 2px 7px #8ab4c633; }
+    .header a { color:inherit; text-decoration:none; font-size:1.35rem; font-weight:800; letter-spacing:.04em; }
+    main { width:min(1040px, calc(100% - 32px)); margin:32px auto 48px; }
+    .intro { text-align:center; margin-bottom:22px; }
+    h1 { margin:0 0 8px; color:var(--navy); font-size:clamp(1.65rem,5vw,2.25rem); }
+    .intro p { margin:0; color:#628096; }
+    .panel { padding:22px; border:1px solid var(--line); border-radius:18px; background:#fff; box-shadow:0 8px 22px #2c657014; }
+    form { display:grid; grid-template-columns:1fr auto; gap:10px; }
+    input { width:100%; min-height:48px; padding:0 15px; border:1px solid #c8dce7; border-radius:10px; font:inherit; outline:none; }
+    input:focus { border-color:var(--sky); box-shadow:0 0 0 3px #75c9ee33; }
+    button { min-height:48px; padding:0 21px; border:0; border-radius:10px; color:#fff; background:var(--sky); font:inherit; font-weight:700; cursor:pointer; }
+    button:hover { background:#4ab8e6; } button:disabled { opacity:.6; cursor:wait; }
+    #status { min-height:24px; margin:14px 2px 0; color:#688095; font-size:.92rem; }
+    #error { display:none; margin-top:14px; padding:12px; border-radius:9px; color:#a33a4d; background:#fff1f3; }
+    #resultArea { display:none; margin-top:22px; }
+    .map { height:370px; overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#e9f3f6; }
+    .map-empty { display:grid; height:100%; place-items:center; color:#718797; text-align:center; padding:25px; }
+    .result-head { display:flex; align-items:center; justify-content:space-between; gap:15px; margin:24px 0 12px; }
+    h2 { margin:0; color:var(--navy); font-size:1.2rem; }
+    .count { color:#7290a3; font-size:.9rem; white-space:nowrap; }
+    .cards { display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; }
+    .card { position:relative; min-width:0; padding:17px 13px 14px; border:1px solid var(--line); border-radius:13px; background:#fff; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+    .card:hover, .card:focus { transform:translateY(-3px); box-shadow:0 7px 16px #2c657025; outline:0; }
+    .rank { display:block; margin-bottom:9px; color:var(--accent); font-weight:800; font-size:.85rem; }
+    .name { display:block; color:var(--navy); font-weight:800; line-height:1.35; word-break:keep-all; }
+    .category,.address { display:block; margin-top:7px; color:#7590a0; font-size:.77rem; line-height:1.42; }
+    .detail { display:inline-block; margin-top:11px; color:#218fbf; font-size:.78rem; font-weight:700; text-decoration:none; }
+    .detail:hover { text-decoration:underline; }
+    .within { margin-top:28px; padding-top:20px; border-top:1px solid var(--line); }
+    .within label { display:block; margin-bottom:9px; color:var(--navy); font-weight:700; }
+    .notice { margin-top:20px; color:#7890a0; font-size:.78rem; line-height:1.6; }
+    @media (max-width:800px) { .cards { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:480px) { main { width:min(100% - 22px,1040px); margin-top:20px; } .panel { padding:15px; } form { grid-template-columns:1fr; } .cards { grid-template-columns:1fr; } .map { height:300px; } }
+  </style>
+</head>
+<body>
+  <header class="header"><a href="main2.html" aria-label="너는솔로 메인으로">YOU ARE SOLO · ROBBY</a></header>
+  <main>
+    <section class="intro"><h1>🍽️ Robby 데이트 맛집 탐색기</h1><p>네이버 지역검색 순서로 엄선한 TOP 5를 카카오맵에서 확인하세요.</p></section>
+    <section class="panel">
+      <form id="searchForm"><input id="area" name="area" required maxlength="80" placeholder="지역 또는 역 이름을 입력하세요 (예: 강남역)" autocomplete="off"><button type="submit">맛집 찾기</button></form>
+      <p id="status" aria-live="polite">데이트 장소를 찾을 지역을 입력해 주세요.</p><div id="error" role="alert"></div>
+      <div id="resultArea">
+        <div id="map" class="map"><div class="map-empty">맛집을 검색하면 지도에 위치가 표시됩니다.</div></div>
+        <div class="result-head"><h2 id="resultTitle">맛집 TOP 5</h2><span id="count" class="count"></span></div>
+        <div id="cards" class="cards"></div>
+        <div class="within"><label for="menu">🔍 결과 내 재검색</label><form id="menuForm"><input id="menu" maxlength="60" placeholder="메뉴를 입력하세요 (예: 파스타, 삼겹살)"><button type="submit">재검색</button></form></div>
+      </div>
+      <p class="notice">검색 순서는 네이버 지역검색 API 결과를 따르며, 지도 위치는 카카오 로컬 API 결과를 사용합니다. 검색 결과가 실제 영업 정보와 다를 수 있으니 방문 전 확인해 주세요.</p>
+    </section>
+  </main>
+  <script>
+    const apiUrl = 'robby_search.php';
+    let map, markers = [], currentResults = [], currentArea = '', kakaoReady = false;
+    const $ = (id) => document.getElementById(id);
+    const escapeHtml = (text = '') => String(text).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    function setBusy(busy, message) { document.querySelectorAll('button').forEach(b => b.disabled = busy); $('status').textContent = message; }
+    function showError(message) { $('error').style.display = 'block'; $('error').textContent = message; }
+    function clearError() { $('error').style.display = 'none'; $('error').textContent = ''; }
+    async function getMapKey() {
+      const response = await fetch(apiUrl + '?action=config'); const data = await response.json();
+      if (!data.ok || !data.kakaoJavascriptKey) throw new Error('카카오 JavaScript 키가 설정되지 않았습니다. robby_search.php의 설정을 확인해 주세요.');
+      await new Promise((resolve, reject) => { const script = document.createElement('script'); script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=' + encodeURIComponent(data.kakaoJavascriptKey); script.onload = resolve; script.onerror = () => reject(new Error('카카오맵을 불러오지 못했습니다.')); document.head.appendChild(script); });
+      await new Promise(resolve => kakao.maps.load(resolve)); kakaoReady = true;
+    }
+    function drawMap(results) {
+      const mapped = results.filter(r => r.longitude && r.latitude);
+      if (!mapped.length) { $('map').innerHTML = '<div class="map-empty">검색 결과의 지도 위치를 찾지 못했습니다.</div>'; return; }
+      if (!map) map = new kakao.maps.Map($('map'), { center:new kakao.maps.LatLng(mapped[0].latitude, mapped[0].longitude), level:5 });
+      markers.forEach(marker => marker.setMap(null)); markers = [];
+      const bounds = new kakao.maps.LatLngBounds();
+      mapped.forEach((place, i) => { const pos = new kakao.maps.LatLng(place.latitude, place.longitude); const marker = new kakao.maps.Marker({position:pos, title:place.title}); marker.setMap(map); markers.push(marker); bounds.extend(pos); const popup = new kakao.maps.InfoWindow({content:'<div style="padding:7px;max-width:180px;font-size:12px">' + (i + 1) + '. ' + escapeHtml(place.title) + '</div>'}); kakao.maps.event.addListener(marker, 'click', () => popup.open(map, marker)); });
+      map.setBounds(bounds); if (mapped.length === 1) map.setLevel(3);
+    }
+    function render(results, label) {
+      currentResults = results; $('resultArea').style.display = 'block'; $('resultTitle').textContent = label + ' 맛집 TOP 5'; $('count').textContent = results.length + '곳';
+      $('cards').innerHTML = results.map((place, i) => '<article class="card" tabindex="0" data-index="' + i + '"><span class="rank">TOP ' + (i + 1) + '</span><span class="name">' + escapeHtml(place.title) + '</span><span class="category">' + escapeHtml(place.category || '맛집') + '</span><span class="address">' + escapeHtml(place.address || '주소 정보 없음') + '</span>' + (place.kakaoUrl ? '<a class="detail" href="' + encodeURI(place.kakaoUrl) + '" target="_blank" rel="noopener">카카오맵 상세 보기 ↗</a>' : '') + '</article>').join('');
+      document.querySelectorAll('.card').forEach(card => { const focus = () => { const p = currentResults[Number(card.dataset.index)]; if (map && p.latitude && p.longitude) map.panTo(new kakao.maps.LatLng(p.latitude,p.longitude)); }; card.addEventListener('click', focus); card.addEventListener('keydown', e => { if(e.key === 'Enter') focus(); }); });
+      drawMap(results);
+    }
+    async function search(menu = '') {
+      const area = $('area').value.trim(); if (!area) { $('area').focus(); return; }
+      clearError(); setBusy(true, '맛집 TOP 5를 찾고 있습니다…');
+      try {
+        if (!kakaoReady) await getMapKey();
+        const body = new URLSearchParams({area, menu}); const response = await fetch(apiUrl, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body}); const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || '검색 중 문제가 발생했습니다.');
+        currentArea = area; render(data.places, data.label); $('status').textContent = '네이버 검색 결과 상위 ' + data.places.length + '곳을 표시했습니다.';
+      } catch (error) { showError(error.message); $('status').textContent = '검색하지 못했습니다.'; } finally { setBusy(false, $('status').textContent); }
+    }
+    $('searchForm').addEventListener('submit', e => { e.preventDefault(); $('menu').value = ''; search(); });
+    $('menuForm').addEventListener('submit', e => { e.preventDefault(); search($('menu').value.trim()); });
+  </script>
+</body>
+</html>

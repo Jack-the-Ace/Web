@@ -1,7 +1,8 @@
 @charset "UTF-8";
 .image_section .ani-text {
     display: inline-block;  font-size: 1.2rem; font-weight: 800;  color: #2c3e50;  opacity: 0;
-    animation-duration: 9s;  animation-iteration-count: infinite;  animation-fill-mode: forwards;
+    animation-duration: 2.5s;  /* 💡 전체 시간을 5초에서 2.5초로 줄여 속도를 2배 올림 */
+    animation-iteration-count: infinite;  animation-fill-mode: forwards;
 }
 .image_section .line1 {
     width: 100%;  text-align: left;  padding-left: 10%;  box-sizing: border-box;  animation-name: fadeLine1;
@@ -12,28 +13,29 @@
 .image_section .line3-1 {animation-name: fadeLine3_1;}
 .image_section .line3-2 {color: #e74c3c; animation-name: fadeLine3_2;}
 .image_section div:has(.line3-1) {width: 100%; text-align: left; padding-left: 55%; box-sizing: border-box;}
-/* 혹시...*/
+
+/* 💡 [혹시...] 0초에 등장해서 0.5초에 소멸 */
 @keyframes fadeLine1 {
-    0%, 15% { opacity: 1; }     /* 0초 ~ 약 1.3초 선명하게 유지 */
-    22% { opacity: 0; }         /* 2초가 되는 시점에 스르륵 소멸 */
+    0%, 15% { opacity: 1; }     /* 0초 ~ 약 0.35초 유지 */
+    20% { opacity: 0; }         /* 0.5초가 되는 시점에 소멸 */
     100% { opacity: 0; }
 }
-/* 아직...*/
+/* 💡 [아직...] 0.5초에 등장해서 1초에 소멸 */
 @keyframes fadeLine2 {
-    0%, 22% { opacity: 0; }     /* 2초까지는 안 보임 */
-    25%, 38% { opacity: 1; }    /* 2초 ~ 3.4초 선명하게 유지 */
-    44% { opacity: 0; }         /* 4초가 되는 시점에 스르륵 소멸 */
+    0%, 20% { opacity: 0; }     /* 0.5초까지는 안 보임 */
+    25%, 35% { opacity: 1; }    /* 0.6초 ~ 0.85초 유지 */
+    40% { opacity: 0; }         /* 1초가 되는 시점에 소멸 */
     100% { opacity: 0; }
 }
-/* 너는....*/
+/* 💡 [너는....] 1초에 등장해서 끝까지 유지 */
 @keyframes fadeLine3_1 {
-    0%, 44% { opacity: 0; }     /* 4초까지 대기 */
-    47%, 95% { opacity: 1; }    /* 4초부터 등장해서 루프 끝 무렵까지 유지 */
-    100% { opacity: 0; }        /* 9초 종료 시점에 아웃 */
+    0%, 40% { opacity: 0; }     /* 1초까지 대기 */
+    45%, 92% { opacity: 1; }    /* 1.1초부터 등장해서 끝까지 유지 */
+    100% { opacity: 0; }        /* 2.5초 루프 종료 시점에 아웃 */
 }
-/* 솔로???  */
+/* 💡 [솔로???] 1.5초에 등장 ("너는..." 혼자 0.5초 노출 후) */
 @keyframes fadeLine3_2 {
-    0%, 66% { opacity: 0; }     /* 6초까지 대기 ("너는...." 혼자 나오는 시간 2초 확보) */
-    69%, 95% { opacity: 1; }    /* 6초에 등장해서 "너는..." 옆에 나란히 안착 */
-    100% { opacity: 0; }        /* 9초 종료 시점에 함께 아웃 */
+    0%, 60% { opacity: 0; }     /* 1.5초까지 대기 */
+    65%, 92% { opacity: 1; }    /* 1.6초에 등장해서 나란히 안착 */
+    100% { opacity: 0; }        /* 2.5초 루프 종료 시점에 함께 아웃 */
 }

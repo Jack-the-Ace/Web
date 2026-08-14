@@ -3,35 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>기대해주세요!</title>
-    <style>
-        body {
-            background-color: #f4f9fc;
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: #2c3e50; margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            overflow-x: hidden;
-        }
-        #wrap {
-            max-width: 450px; width: 100%; height: 100vh; padding: 20px; box-sizing: border-box;
-            background: #d9edf7; border: 1px solid #e6f2fa;  box-shadow: 0 8px 24px rgba(163, 197, 222, 0.2);
-            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-        }
-        #logo {display: flex;  align-items: center;  justify-content: center;}
-        #logo img {max-height: 140px;  width: auto;  object-fit: contain;}
-        img{width: 250px; height: 200px;}
-        hr {border: 0; height: 1px; background-color: #9dd1f7;  width: 100%;}
-    </style>
+    <title>맛집 검색!</title>
+
+    <link rel="stylesheet" href="css/robby.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 </head>
 <body>
-    <div id="wrap">
-        <div id="logo"><img src="./boys/logo.png" alt="logo"></div>  
-        <hr> 
-        <h2>추후 업데이트 예정입니다!</h2>
-        <hr>
-        <h4>더 완벽한 모습으로 찾아뵙겠습니다!</h4>
-        <br>
-        <img src="./boys/logo.png" alt="logo">
+    <h1>지역별 메뉴별 맛집 TOP5</h1>
+    <div class="search-box">
+        <input type="text" id="keywordInput" placeholder="지역명 or 지역+메뉴로 검색해보아요! (ex. '신림역 치킨', '구읍뱃터 가리비' 등..)">
+        <button onclick="searchRestaurants()">맛집 찾기!</button>
     </div>
+    <h3 id="resultTitle">검색어를 입력해주세요!</h3>
+    <div id="map"></div>
+    
+    <section id="resultList">
+        <h2>맛집 결과!</h2>
+        <div id="cards" class="cards"></div>
+    </section>
+
+    <script>
+        var map = null;
+
+        function searchRestaurants(){
+            var keyword= document.getElementById('keywordInput').value.trim();
+            if (!keyword){
+                alert("검색어를 입력해주세요!😉")
+                return
+            }
+            fetch('search_api.php?keyword=' + encodeURIComponent(keyword))
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status === 'empty'){
+                        alert("검색 결과가 없습니다...🥹");
+                        return
+                    }
+                    document.getElementById('resultTitle').innerText= `🔍 '${data.keyword}' 맛집 TOP5 검색 결과`;
+                    renderMap(data.places);
+                    renderResults(data.places);
+                })
+                .catch(error => {
+                    console.error("오류 발생! :", error);
+                    alert("데이터를 가져오는 중 오류가 발생했습니다...🤔");
+                });
+        }
+
+        function renderMap(places){
+            if (map !== null){
+                map.remove();
+            }
+            var firstLat= places[0].y;
+            var firstLng= places[0].x;
+
+            map= L.map('map').setView([firstLat, firstLng], 14);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            places.forEach((place, index) => {
+                var lat= place.y;
+                var lng= place.x;
+                var title= place.place_name;
+                var address= place.road_address_name || place.address_name;
+                var phone= place.phone || '전화번호 없음';
+                var url= place.place_url;
+                var popupContent= `
+                    <div class="popup-container">
+                        <b class="popup-title">${index+1}. ${title}</b><br>
+                        <small class="popup-text">${address}</small><br>
+                        <small class="popup-text">☎ ${phone}</small><br><br>
+                        <a href="${url}" target="_blank" class="popup-link">상세정보 보기↗</a>
+                    </div>
+                `;
+
+                L.marker([lat, lng])
+                    .addTo(map)
+                    .bindTooltip(`<b>${index+1}. ${title}</b>`)
+                    .bindPopup(popupContent);                
+            });
+        }
+
+        function renderResults(places){
+            var cards= document.getElementById('cards');
+            
+            document.getElementById('resultList').style.display= 'block';
+            
+            cards.innerHTML= places.map(function(place, index){
+                var address= place.road_address_name || place.address_name || '주소정보 없음🙃';
+                var phone= place.phone || '전화번호 없음🙃';
+                return `
+                    <article class="restaurant-card">
+                        <span class="rank">TOP ${index+1}</span>
+                        <h3>${place.place_name}</h3>
+                        <p>📍 ${address}</p>
+                        <p>☎ ${phone}</p>
+                        <a href="${place.place_url}" target="_blank">
+                            카카오맵 상세보기↗
+                        </a>
+                    </article>
+                `;
+            }).join('');
+        }
+    </script>
 </body>
 </html>
